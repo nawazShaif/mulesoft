@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="a0c71c29-3c52-46cf-9ebd-c6f225e960b9" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="main-flow" doc:id="5f2cea83-756c-45ff-929b-f8194c90d080" >
+		<http:listener doc:name="Listener" doc:id="4844b46b-48d7-4f70-9aee-50236f811a82" config-ref="HTTP_Listener_config" path="/test"/>
+		<logger level="INFO" doc:name="Logger" doc:id="1860bc3d-8d6f-4542-be39-dc39b0d03551" />
+		<flow-ref doc:name="Flow Reference" doc:id="b490014b-b50f-400f-906b-2a0e30445a38" name="private-flow"/>
+		<ee:transform doc:name="Transform Message" doc:id="11ba4f83-0ca3-4c48-ab63-39bdb174e37a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="b6b08f42-a801-4005-a7f8-19ac85759196" />
+	</flow>
+	<flow name="private-flow" doc:id="4c1150ee-9956-4c26-ac0f-06d0a2fbd97e" >
+		<set-variable value="" doc:name="Set Variable" doc:id="f0b7b125-fa66-4a04-9984-65fc809c942b" variableName="abc"/>
+		<logger level="INFO" doc:name="Logger" doc:id="a1017d57-39a2-4f24-aa8b-6e10a7daf06e" />
+		<ee:transform doc:name="Transform Message" doc:id="84162e4b-b257-458b-8276-ef4bb6785ef0" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<remove-variable doc:name="Remove Variable" doc:id="56db4bf2-229c-4d13-ab0a-1762648868eb" variableName="cde"/>
+		<flow-ref doc:name="Flow Reference" doc:id="01ad2232-ca06-42af-9ae4-4a288e6a1381" name="muleprojectSub_Flow"/>
+		<remove-variable doc:name="Remove Variable" doc:id="33bb5e4d-42aa-4fa8-877f-71e19d44c345" variableName="xzb"/>
+		<logger level="INFO" doc:name="Logger" doc:id="34cc7fee-511d-457c-8aed-0127bb35e3b0" />
+	</flow>
+	<sub-flow name="muleprojectSub_Flow" doc:id="6c322766-909f-4deb-8c03-21ed9532973a" >
+		<logger level="INFO" doc:name="Logger" doc:id="6ea69a82-5753-44ae-b717-8dfe6a4c65b6" />
+	</sub-flow>
+</mule>
